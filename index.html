@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>一个简单的轮播</title>
+    <style>
+        body{
+            color: #aaa
+        }
+        .images{
+            display: flex;
+            align-items: flex-start;
+            transition: all 0.5s;
+        }
+        .window{
+            width: 300px;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+        #buttons{
+            display: flex;
+            justify-content:center;
+            margin: 20px 0;
+        }
+        #buttons > span{
+            margin: 0 10px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .red{
+            color: yellow
+        }
+    </style>
+</head>
+<body>
+    <div class="window">
+        <div class="images" id="images">
+            <img src="imgs/1.jpg" alt="图片1" width="300px">
+            <img src="imgs/2.jpg" alt="图片2" width="300px">   
+            <img src="imgs/3.jpg" alt="图片3" width="300px">   
+            <img src="imgs/4.jpg" alt="图片4" width="300px">   
+        </div>
+    </div>
+    <span id="buttons">
+        <span>第1张</span>
+        <span>第2张</span>  
+        <span>第3张</span>  
+        <span>第4张</span>    
+    </span>
+<script src="jquery-1.11.3.js"></script>
+<script>
+    var allButtons = $('#buttons > span')
+    for(let i = 0;i<allButtons.length;i++){
+        $(allButtons[i]).on('click',function(x){
+            var index = $(x.currentTarget).index()
+            var p = index*-300
+            $('#images').css({
+                transform:'translate('+p+'px)'
+            }) 
+            n = index
+            activeButton(allButtons.eq(n))
+        })
+    }
+    var n = 0;
+    var size = allButtons.length
+    playSlide(n%size)
+
+    var timerId = setTimer()
+
+    function setTimer(){
+        return setInterval(() =>{
+            n +=1
+            playSlide(n % size)
+        },3000)
+    }
+
+    function playSlide(index){
+        allButtons.eq(index).trigger('click')
+    }
+    function activeButton($button){
+        $button.addClass('red')
+               .siblings('.red').removeClass('red')
+    }
+    $('.window').on('mouseenter',function(){
+        window.clearInterval(timerId)
+    })
+    $('.window').on('mouseleave',function(){
+        timerId = setTimer()
+    })
+</script>    
+</body>
+</html>
